@@ -1,0 +1,30 @@
+# Activer la réécriture d'URL
+
+RewriteEngine On
+RewriteBase /SpaceDoc/public/
+
+# Rediriger les URL sans extension vers leur fichier PHP
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^/.]+)$ $1.php [L,QSA]
+
+# Rediriger toutes les requêtes vers index.php sauf si le fichier existe
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+
+# Protection contre l'accès aux fichiers sensibles
+
+<FilesMatch "\.(env|git|gitignore|htaccess|htpasswd|sql|json|log|ini)$">
+Require all denied
+</FilesMatch>
+
+# Protection contre le listing des fichiers du dossier
+
+Options -Indexes
+
+# Rediriger les erreurs 404 vers une page personnalisée
+
+ErrorDocument 404 /SpaceDoc/public/404.php
